@@ -1,0 +1,21 @@
+# Build
+target/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+
+# Segredos: nunca versionar
+.env
+*.env
+config.properties
+.chatia/
+application-local.properties
+
+# Logs e arquivos temporarios
+hs_err_pid*.log
+icone-do-exe.png
