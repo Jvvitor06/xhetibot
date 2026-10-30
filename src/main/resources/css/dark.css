@@ -1,0 +1,36 @@
+/* Tema ESCURO: só define os valores das cores usadas em base.css */
+
+.root {
+    -cor-fundo-app: #0d0d15;
+    -cor-fundo-sidebar: #11111a;
+    -cor-card: #151520;
+    -cor-campo: #0d0d15;
+    -cor-menu: #1f1f2e;
+    -cor-bolha-ia: #1d1d2b;
+
+    -cor-auth-topo: #1d1633;
+    -cor-auth-base: #09090e;
+
+    -cor-texto: #f7f7fb;
+    -cor-texto-corpo: #e5e5ed;
+    -cor-texto-suave: #a7a8b5;
+    -cor-texto-fraco: #898797;
+    -cor-campo-texto: #ffffff;
+    -cor-bolha-ia-texto: #f1f1f7;
+
+    -cor-borda: rgba(255, 255, 255, 0.12);
+    -cor-borda-campo: rgba(255, 255, 255, 0.14);
+    -cor-borda-suave: rgba(255, 255, 255, 0.08);
+
+    -cor-hover: rgba(255, 255, 255, 0.07);
+    -cor-selecionado: rgba(255, 77, 109, 0.18);
+    -cor-botao-sec: rgba(255, 255, 255, 0.07);
+    -cor-botao-sec-hover: rgba(255, 255, 255, 0.13);
+    -cor-scroll: rgba(255, 255, 255, 0.18);
+    -cor-sombra: rgba(0, 0, 0, 0.55);
+
+    -cor-link: #ff9bab;
+    -cor-erro: #ff9bab;
+    -cor-ok: #7ee0a1;
+    -cor-banner-erro: rgba(255, 77, 109, 0.14);
+}

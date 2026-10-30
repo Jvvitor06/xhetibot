@@ -1,0 +1,345 @@
+/* =====================================================================
+   base.css - todas as regras de aparência.
+   As cores vêm de variáveis (-cor-*) definidas em dark.css / light.css.
+   ===================================================================== */
+
+.root {
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-size: 14px;
+
+    /* Cor de destaque: igual nos dois temas */
+    -cor-destaque: #ff4d6d;
+}
+
+/* ================= Login / Cadastro ================= */
+
+.auth-root {
+    -fx-background-color: linear-gradient(to bottom, -cor-auth-topo, -cor-auth-base);
+}
+
+.auth-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-padding: 0;
+}
+
+.auth-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.card {
+    -fx-background-color: -cor-card;
+    -fx-background-radius: 22;
+    -fx-border-color: -cor-borda;
+    -fx-border-radius: 22;
+    -fx-padding: 30 34 30 34;
+    -fx-effect: dropshadow(gaussian, -cor-sombra, 40, 0.2, 0, 12);
+}
+
+.eyebrow {
+    -fx-text-fill: -cor-destaque;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+}
+
+.titulo {
+    -fx-text-fill: -cor-texto;
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+}
+
+.subtitulo {
+    -fx-text-fill: -cor-texto-suave;
+    -fx-wrap-text: true;
+}
+
+.rotulo {
+    -fx-text-fill: -cor-texto-corpo;
+    -fx-font-size: 12px;
+    -fx-padding: 6 0 0 0;
+}
+
+.text-field,
+.password-field {
+    -fx-background-color: -cor-campo;
+    -fx-text-fill: -cor-campo-texto;
+    -fx-prompt-text-fill: -cor-texto-fraco;
+    -fx-background-radius: 10;
+    -fx-border-color: -cor-borda-campo;
+    -fx-border-radius: 10;
+    -fx-padding: 12 13 12 13;
+}
+
+.text-field:focused,
+.password-field:focused {
+    -fx-border-color: -cor-destaque;
+}
+
+.botao-primario {
+    -fx-background-color: linear-gradient(to right, #ff4d6d, #d83259);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-padding: 12 16 12 16;
+    -fx-cursor: hand;
+}
+
+.botao-primario:hover {
+    -fx-opacity: 0.9;
+}
+
+.botao-primario:disabled {
+    -fx-opacity: 0.6;
+}
+
+.botao-secundario {
+    -fx-background-color: -cor-botao-sec;
+    -fx-text-fill: -cor-texto-corpo;
+    -fx-background-radius: 10;
+    -fx-padding: 10 16 10 16;
+    -fx-cursor: hand;
+}
+
+.botao-secundario:hover {
+    -fx-background-color: -cor-botao-sec-hover;
+}
+
+.link {
+    -fx-background-color: transparent;
+    -fx-text-fill: -cor-link;
+    -fx-cursor: hand;
+    -fx-padding: 4 0 4 0;
+}
+
+.link:hover {
+    -fx-underline: true;
+}
+
+.mensagem-erro {
+    -fx-text-fill: -cor-erro;
+    -fx-wrap-text: true;
+}
+
+.mensagem-ok {
+    -fx-text-fill: -cor-ok;
+    -fx-wrap-text: true;
+}
+
+/* ================= Chat ================= */
+
+.chat-root {
+    -fx-background-color: -cor-fundo-app;
+}
+
+.chat-centro {
+    -fx-background-color: -cor-fundo-app;
+}
+
+.sidebar {
+    -fx-background-color: -cor-fundo-sidebar;
+    -fx-padding: 18;
+    -fx-border-color: transparent -cor-borda-suave transparent transparent;
+}
+
+.sidebar-titulo {
+    -fx-text-fill: -cor-texto;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.sidebar-usuario {
+    -fx-text-fill: -cor-texto-suave;
+    -fx-padding: 4 0 0 2;
+}
+
+/* Lista de conversas */
+.lista-conversas {
+    -fx-background-color: transparent;
+    -fx-control-inner-background: transparent;
+    -fx-padding: 0;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.lista-conversas .list-cell {
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+    -fx-padding: 4 6 4 10;
+    -fx-text-fill: -cor-texto-corpo;
+}
+
+.lista-conversas .list-cell:filled:hover {
+    -fx-background-color: -cor-hover;
+}
+
+.lista-conversas .list-cell:filled:selected {
+    -fx-background-color: -cor-selecionado;
+}
+
+.conversa-titulo {
+    -fx-text-fill: -cor-texto-corpo;
+}
+
+.menu-conversa {
+    -fx-background-color: transparent;
+    -fx-text-fill: -cor-texto-fraco;
+    -fx-padding: 2 6 2 6;
+    -fx-cursor: hand;
+}
+
+.menu-conversa:hover {
+    -fx-background-color: -cor-hover;
+    -fx-background-radius: 6;
+    -fx-text-fill: -cor-texto;
+}
+
+.context-menu {
+    -fx-background-color: -cor-menu;
+    -fx-background-radius: 10;
+    -fx-border-color: -cor-borda;
+    -fx-border-radius: 10;
+    -fx-padding: 6;
+}
+
+.context-menu .menu-item {
+    -fx-background-radius: 6;
+}
+
+.context-menu .menu-item .label {
+    -fx-text-fill: -cor-texto-corpo;
+}
+
+.context-menu .menu-item:focused {
+    -fx-background-color: -cor-destaque;
+}
+
+.context-menu .menu-item:focused .label {
+    -fx-text-fill: white;
+}
+
+/* Área do chat */
+.chat-cabecalho {
+    -fx-padding: 18 24 14 24;
+    -fx-border-color: transparent transparent -cor-borda-suave transparent;
+}
+
+.chat-titulo {
+    -fx-text-fill: -cor-texto;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+}
+
+.chat-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-padding: 0;
+}
+
+.chat-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.chat-entrada {
+    -fx-padding: 14 24 20 24;
+}
+
+.text-area {
+    -fx-control-inner-background: -cor-campo;
+    -fx-background-color: -cor-campo;
+    -fx-text-fill: -cor-campo-texto;
+    -fx-prompt-text-fill: -cor-texto-fraco;
+    -fx-background-radius: 12;
+    -fx-border-color: -cor-borda-campo;
+    -fx-border-radius: 12;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.text-area .content {
+    -fx-background-color: -cor-campo;
+    -fx-background-radius: 12;
+}
+
+.text-area:focused {
+    -fx-border-color: -cor-destaque;
+}
+
+.bolha-usuario {
+    -fx-background-color: linear-gradient(to right, #ff4d6d, #d83259);
+    -fx-text-fill: white;
+    -fx-background-radius: 16 16 4 16;
+    -fx-padding: 10 14 10 14;
+}
+
+.bolha-ia {
+    -fx-background-color: -cor-bolha-ia;
+    -fx-text-fill: -cor-bolha-ia-texto;
+    -fx-background-radius: 16 16 16 4;
+    -fx-border-color: -cor-borda-suave;
+    -fx-border-radius: 16 16 16 4;
+    -fx-padding: 10 14 10 14;
+}
+
+.bolha-digitando {
+    -fx-text-fill: -cor-texto-suave;
+    -fx-font-style: italic;
+}
+
+.banner-erro {
+    -fx-background-color: -cor-banner-erro;
+    -fx-padding: 10 24 10 24;
+}
+
+/* Barras de rolagem discretas */
+.scroll-bar {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: -cor-scroll;
+    -fx-background-radius: 6;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+    -fx-shape: " ";
+}
+
+/* ================= Diálogos (renomear / confirmar exclusão) ================= */
+
+.dialog-pane {
+    -fx-background-color: -cor-card;
+}
+
+.dialog-pane .label {
+    -fx-text-fill: -cor-texto;
+}
+
+.dialog-pane > .button-bar > .container {
+    -fx-background-color: -cor-card;
+}
+
+.dialog-pane .button {
+    -fx-background-color: -cor-botao-sec-hover;
+    -fx-text-fill: -cor-texto;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.dialog-pane .button:default {
+    -fx-background-color: linear-gradient(to right, #ff4d6d, #d83259);
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
