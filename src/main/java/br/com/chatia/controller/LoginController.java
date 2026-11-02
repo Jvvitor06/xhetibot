@@ -5,13 +5,15 @@ import br.com.chatia.service.UsuarioService;
 import br.com.chatia.util.Estilos;
 import br.com.chatia.util.MensagemErro;
 import br.com.chatia.util.Sessao;
+import br.com.chatia.util.TransicaoForma;
 import br.com.chatia.view.ChatView;
+import br.com.chatia.view.ForgotPasswordView;
 import br.com.chatia.view.RegisterView;
 import javafx.concurrent.Task;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import br.com.chatia.view.ForgotPasswordView;
 
 public class LoginController {
 
@@ -47,7 +49,8 @@ public class LoginController {
                 return;
             }
             Sessao.iniciar(usuario);
-            new ChatView().show(stage);
+            // O botão "Entrar" muda de forma até virar a tela inteira e o chat surge
+            TransicaoForma.navegar(botao, () -> new ChatView().show(stage));
         });
 
         tarefa.setOnFailed(e -> {
@@ -60,12 +63,12 @@ public class LoginController {
         thread.start();
     }
 
-    public void irParaCadastro() {
-        new RegisterView().show(stage);
+    public void irParaCadastro(Node origem) {
+        TransicaoForma.navegar(origem, () -> new RegisterView().show(stage));
     }
 
-    public void irParaRecuperacao() {
-        new ForgotPasswordView().show(stage);
+    public void irParaRecuperacao(Node origem) {
+        TransicaoForma.navegar(origem, () -> new ForgotPasswordView().show(stage));
     }
 
     private void ocupado(Button botao, boolean ocupado) {

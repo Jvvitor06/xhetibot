@@ -1,24 +1,47 @@
 package br.com.chatia.view;
 
 import br.com.chatia.controller.ChatController;
+import br.com.chatia.controller.ThemeController;
 import br.com.chatia.model.AutorMensagem;
 import br.com.chatia.model.Conversa;
 import br.com.chatia.model.Mensagem;
+import br.com.chatia.util.Animacoes;
 import br.com.chatia.util.Estilos;
 import br.com.chatia.util.Sessao;
+import br.com.chatia.util.TextoSimples;
+import br.com.chatia.util.TransicaoForma;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import br.com.chatia.controller.ThemeController;
 
 public class ChatView {
 
@@ -28,35 +51,43 @@ public class ChatView {
     private Stage stage;
     private ChatController controller;
 
-    // Componentes que precisam ser acessados em vários métodos
+    // Componentes usados em vários métodos
     private final ListView<Conversa> listaConversas = new ListView<>();
     private final VBox mensagensBox = new VBox(12);
     private final TextArea campoMensagem = new TextArea();
     private final Button botaoEnviar = new Button("Enviar");
+    private final Button botaoNova = new Button("+  Nova conversa");
     private final Label lblTitulo = new Label();
     private final Label lblErro = new Label();
+    private final Pane overlay = new Pane();     // camada onde a forma da transição é desenhada
     private ScrollPane scrollMensagens;
     private VBox areaChat;
     private VBox estadoVazio;
+    private StackPane raiz;
 
     // Estado da tela
     private Conversa conversaAtual;
     private boolean atualizandoLista = false;
     private boolean enviando = false;
+    private Node ultimaOrigemClique;             // onde o usuário clicou na lista
 
     public void show(Stage stage) {
         this.stage = stage;
         this.controller = new ChatController(stage);
 
-        BorderPane raiz = new BorderPane();
-        raiz.getStyleClass().add("chat-root");
-        raiz.setLeft(criarSidebar());
-        raiz.setCenter(criarAreaCentral());
+        BorderPane conteudo = new BorderPane();
+        conteudo.getStyleClass().add("chat-root");
+        conteudo.setLeft(criarSidebar());
+        conteudo.setCenter(criarAreaCentral());
+
+        overlay.setMouseTransparent(true);
+        raiz = new StackPane(conteudo, overlay);
+        TransicaoForma.registrar(raiz, overlay);
 
         Scene scene = new Scene(raiz, 1100, 700);
         Estilos.aplicar(scene);
 
-        stage.setTitle("Chat IA");
+        stage.setTitle("Heaven AI");
         stage.setMinWidth(760);
         stage.setMinHeight(520);
         stage.setScene(scene);
@@ -67,6 +98,11 @@ public class ChatView {
         }
         stage.show();
 
+        if (TransicaoForma.revelarSeNecessario(overlay)) {
+            Animacoes.aparecer(conteudo, 320); // o chat surge enquanto a forma se dissolve
+        } else {
+            Animacoes.fadeIn(raiz, 450);
+        }
         carregarConversasIniciais();
     }
 
@@ -75,10 +111,9 @@ public class ChatView {
     // ------------------------------------------------------------------
 
     private VBox criarSidebar() {
-        Label marca = new Label("Chat IA");
+        Label marca = new Label("Heaven AI");
         marca.getStyleClass().add("sidebar-titulo");
 
-        Button botaoNova = new Button("+  Nova conversa");
         botaoNova.getStyleClass().add("botao-primario");
         botaoNova.setMaxWidth(Double.MAX_VALUE);
         botaoNova.setOnAction(e -> novaConversa());
@@ -94,9 +129,12 @@ public class ChatView {
         listaConversas.setCellFactory(lv -> new CelulaConversa());
         listaConversas.getSelectionModel().selectedItemProperty().addListener(
                 (obs, antiga, selecionada) -> {
-                    if (!atualizandoLista && selecionada != null) {
-                        abrirConversa(selecionada);
+                    if (atualizandoLista || selecionada == null) {
+                        return;
                     }
+                    Node origem = ultimaOrigemClique != null ? ultimaOrigemClique : listaConversas;
+                    ultimaOrigemClique = null;
+                    trocarConversa(selecionada, origem);
                 }
         );
         VBox.setVgrow(listaConversas, Priority.ALWAYS);
@@ -113,7 +151,8 @@ public class ChatView {
         Button botaoSair = new Button("Sair");
         botaoSair.getStyleClass().add("botao-secundario");
         botaoSair.setMaxWidth(Double.MAX_VALUE);
-        botaoSair.setOnAction(e -> controller.sair());
+        // A tela some aos poucos (fade out) e só depois volta para o login
+        botaoSair.setOnAction(e -> Animacoes.fadeOut(raiz, 380, controller::sair));
 
         VBox sidebar = new VBox(12, marca, botaoNova, rotulo, listaConversas,
                 usuario, botaoTema, botaoSair);
@@ -213,6 +252,9 @@ public class ChatView {
             linha.setAlignment(Pos.CENTER_LEFT);
             linha.getChildren().addAll(titulo, menu);
             setPrefWidth(0); // evita barra de rolagem horizontal na lista
+
+            // Guarda a célula clicada: é dela que a transição nasce
+            setOnMousePressed(e -> ultimaOrigemClique = this);
         }
 
         @Override
@@ -235,20 +277,53 @@ public class ChatView {
         controller.carregarConversas(conversas -> {
             preencherLista(conversas);
             if (!conversas.isEmpty()) {
-                listaConversas.getSelectionModel().select(0);
+                atualizandoLista = true; // abertura inicial: sem transição
+                try {
+                    listaConversas.getSelectionModel().select(0);
+                } finally {
+                    atualizandoLista = false;
+                }
+                abrirConversa(conversas.get(0), null);
             }
         }, this::mostrarErro);
     }
 
+    /** O botão muda de forma até virar a tela inteira; por baixo, a nova conversa é criada e aberta. */
     private void novaConversa() {
         limparErro();
-        controller.criarConversa(conversa -> {
-            listaConversas.getItems().add(0, conversa);
-            listaConversas.getSelectionModel().select(conversa);
-        }, this::mostrarErro);
+        TransicaoForma.executar(botaoNova, retomar ->
+                controller.criarConversa(conversa -> {
+                    atualizandoLista = true;
+                    try {
+                        listaConversas.getItems().add(0, conversa);
+                        listaConversas.getSelectionModel().select(conversa);
+                    } finally {
+                        atualizandoLista = false;
+                    }
+                    conversaAtual = conversa;
+                    lblTitulo.setText(conversa.getTitulo());
+                    mensagensBox.getChildren().clear();
+                    mostrarChat(true);
+                    campoMensagem.requestFocus();
+                    Animacoes.aparecer(areaChat, 150);
+                    retomar.run();
+                }, erro -> {
+                    mostrarErro(erro);
+                    retomar.run();
+                })
+        );
     }
 
-    private void abrirConversa(Conversa conversa) {
+    /** Mesma transição ao trocar de conversa, saindo do item clicado. */
+    private void trocarConversa(Conversa conversa, Node origem) {
+        TransicaoForma.executar(origem, retomar -> abrirConversa(conversa, () -> {
+            Animacoes.aparecer(areaChat, 150);
+            retomar.run();
+        }));
+    }
+
+    /** Carrega a conversa; "aoTerminar" (pode ser null) revela a tela quando tudo está pronto. */
+    private void abrirConversa(Conversa conversa, Runnable aoTerminar) {
         conversaAtual = conversa;
         lblTitulo.setText(conversa.getTitulo());
         limparErro();
@@ -257,19 +332,21 @@ public class ChatView {
         mensagensBox.getChildren().setAll(criarEstado("Carregando mensagens..."));
 
         controller.carregarMensagens(conversa, mensagens -> {
-            if (!mesmaConversa(conversa)) {
-                return; // o usuário já abriu outra conversa
+            if (mesmaConversa(conversa)) {
+                mensagensBox.getChildren().clear();
+                for (Mensagem m : mensagens) {
+                    mensagensBox.getChildren().add(
+                            criarBolha(m.getAutor(), m.getConteudo(), false, false));
+                }
+                campoMensagem.requestFocus();
             }
-            mensagensBox.getChildren().clear();
-            for (Mensagem m : mensagens) {
-                mensagensBox.getChildren().add(criarBolha(m.getAutor(), m.getConteudo()));
-            }
-            campoMensagem.requestFocus();
+            concluir(aoTerminar);
         }, erro -> {
             if (mesmaConversa(conversa)) {
                 mensagensBox.getChildren().clear();
                 mostrarErro(erro);
             }
+            concluir(aoTerminar);
         });
     }
 
@@ -339,22 +416,25 @@ public class ChatView {
         campoMensagem.clear();
         definirEnviando(true);
 
-        HBox bolhaUsuario = criarBolha(AutorMensagem.USUARIO, texto);
-        HBox indicador = criarIndicador();
+        HBox bolhaUsuario = criarBolha(AutorMensagem.USUARIO, texto, true, false);
+        HBox indicador = criarIndicadorDigitando();
         mensagensBox.getChildren().addAll(bolhaUsuario, indicador);
 
         controller.enviar(conversa, texto, resposta -> {
             definirEnviando(false);
+            removerIndicador(indicador);
             if (mesmaConversa(conversa)) {
-                mensagensBox.getChildren().remove(indicador);
-                mensagensBox.getChildren().add(criarBolha(AutorMensagem.IA, resposta.getConteudo()));
+                // A resposta da IA entra e é "digitada" na tela
+                mensagensBox.getChildren().add(
+                        criarBolha(AutorMensagem.IA, resposta.getConteudo(), true, true));
             }
             recarregarLista(); // atualiza título automático e ordem
         }, erro -> {
             definirEnviando(false);
+            removerIndicador(indicador);
             if (mesmaConversa(conversa)) {
                 // A pergunta não foi salva: tira o balão e devolve o texto ao campo
-                mensagensBox.getChildren().removeAll(indicador, bolhaUsuario);
+                mensagensBox.getChildren().remove(bolhaUsuario);
                 mostrarErro(erro);
                 campoMensagem.setText(texto);
             }
@@ -365,6 +445,12 @@ public class ChatView {
     // ------------------------------------------------------------------
     // Auxiliares
     // ------------------------------------------------------------------
+
+    private void concluir(Runnable acao) {
+        if (acao != null) {
+            acao.run();
+        }
+    }
 
     private void recarregarLista() {
         controller.carregarConversas(this::preencherLista, this::mostrarErro);
@@ -408,23 +494,57 @@ public class ChatView {
         botaoEnviar.setText(valor ? "Enviando..." : "Enviar");
     }
 
-    private HBox criarBolha(AutorMensagem autor, String texto) {
+    /**
+     * @param animar  a bolha entra deslizando
+     * @param digitar o texto aparece aos poucos (só para respostas novas da IA)
+     */
+    private HBox criarBolha(AutorMensagem autor, String texto, boolean animar, boolean digitar) {
         boolean doUsuario = autor == AutorMensagem.USUARIO;
+        // Respostas da IA passam pelo limpador de Markdown (#, **, - ...)
+        String exibido = doUsuario ? texto : TextoSimples.limpar(texto);
 
-        Label conteudo = new Label(texto);
+        Label conteudo = new Label(digitar ? "" : exibido);
         conteudo.setWrapText(true);
         conteudo.setMaxWidth(LARGURA_BOLHA);
         conteudo.getStyleClass().add(doUsuario ? "bolha-usuario" : "bolha-ia");
 
         HBox linha = new HBox(conteudo);
         linha.setAlignment(doUsuario ? Pos.CENTER_RIGHT : Pos.CENTER_LEFT);
+
+        if (animar) {
+            Animacoes.entrarBolha(linha, doUsuario);
+        }
+        if (digitar) {
+            Animacoes.digitar(conteudo, exibido);
+        }
         return linha;
     }
 
-    private HBox criarIndicador() {
-        HBox linha = criarBolha(AutorMensagem.IA, "Pensando...");
-        linha.getChildren().get(0).getStyleClass().add("bolha-digitando");
+    /** Balão da IA com três pontinhos pulando enquanto a resposta não chega. */
+    private HBox criarIndicadorDigitando() {
+        List<Circle> pontos = new ArrayList<>();
+        HBox balao = new HBox(6);
+        balao.setAlignment(Pos.CENTER);
+        balao.getStyleClass().add("bolha-ia");
+        balao.setMaxWidth(Region.USE_PREF_SIZE);
+
+        for (int i = 0; i < 3; i++) {
+            Circle ponto = new Circle(4);
+            ponto.getStyleClass().add("ponto-digitando");
+            pontos.add(ponto);
+            balao.getChildren().add(ponto);
+        }
+
+        HBox linha = new HBox(balao);
+        linha.setAlignment(Pos.CENTER_LEFT);
+        Animacoes.entrarBolha(linha, false);
+        Animacoes.guardar(linha, Animacoes.animarPontos(pontos));
         return linha;
+    }
+
+    private void removerIndicador(HBox indicador) {
+        Animacoes.parar(indicador);
+        mensagensBox.getChildren().remove(indicador);
     }
 
     private Label criarEstado(String texto) {

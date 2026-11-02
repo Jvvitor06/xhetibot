@@ -63,7 +63,7 @@ public class ForgotPasswordView {
 
         Button voltar = new Button("Voltar ao login");
         voltar.getStyleClass().add("link");
-        voltar.setOnAction(e -> controller.voltar());
+        voltar.setOnAction(e -> controller.voltar(voltar));
 
         // ---------- Ações ----------
         botaoGerar.setOnAction(e -> controller.solicitarCodigo(

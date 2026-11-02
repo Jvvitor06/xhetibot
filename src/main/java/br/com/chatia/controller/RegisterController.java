@@ -3,11 +3,13 @@ package br.com.chatia.controller;
 import br.com.chatia.service.UsuarioService;
 import br.com.chatia.util.Estilos;
 import br.com.chatia.util.MensagemErro;
+import br.com.chatia.util.TransicaoForma;
 import br.com.chatia.view.LoginView;
 import javafx.concurrent.Task;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import javafx.scene.Node;
 
 public class RegisterController {
 
@@ -41,9 +43,9 @@ public class RegisterController {
                 return null;
             }
         };
-
         tarefa.setOnSucceeded(e ->
-                new LoginView().show(stage, "Conta criada com sucesso! Faça login.")
+                TransicaoForma.navegar(botao, () ->
+                        new LoginView().show(stage, "Conta criada com sucesso! Faça login."))
         );
 
         tarefa.setOnFailed(e -> {
@@ -56,8 +58,8 @@ public class RegisterController {
         thread.start();
     }
 
-    public void irParaLogin() {
-        new LoginView().show(stage);
+    public void irParaLogin(Node origem) {
+        TransicaoForma.navegar(origem, () -> new LoginView().show(stage));
     }
 
     private void ocupado(Button botao, boolean ocupado) {

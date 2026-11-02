@@ -2,15 +2,18 @@ package br.com.chatia.util;
 
 public enum Tema {
 
-    ESCURO("/css/dark.css", "Tema escuro"),
-    CLARO("/css/light.css", "Tema claro");
+    // O 3º valor é a cor de fundo da aplicação, usada pela transição de telas
+    ESCURO("/css/dark.css", "Tema escuro", "#0c1017"),
+    CLARO("/css/light.css", "Tema claro", "#f1f6fb");
 
     private final String caminho;
     private final String nome;
+    private final String corFundo;
 
-    Tema(String caminho, String nome) {
+    Tema(String caminho, String nome, String corFundo) {
         this.caminho = caminho;
         this.nome = nome;
+        this.corFundo = corFundo;
     }
 
     public String getCaminho() {
@@ -19,6 +22,10 @@ public enum Tema {
 
     public String getNome() {
         return nome;
+    }
+
+    public String getCorFundo() {
+        return corFundo;
     }
 
     /** O tema para o qual o usuário pode alternar. */

@@ -42,10 +42,10 @@ public class LoginView {
 
         Button esqueci = new Button("Esqueci minha senha");
         esqueci.getStyleClass().add("link");
-        esqueci.setOnAction(e -> controller.irParaRecuperacao());
+        esqueci.setOnAction(e -> controller.irParaRecuperacao(esqueci));
         Button criarConta = new Button("Não tem conta? Cadastre-se");
         criarConta.getStyleClass().add("link");
-        criarConta.setOnAction(e -> controller.irParaCadastro());
+        criarConta.setOnAction(e -> controller.irParaCadastro(criarConta));
 
         entrar.setOnAction(e -> controller.entrar(
                 txtEmail.getText(), txtSenha.getText(), mensagem, entrar
@@ -61,7 +61,7 @@ public class LoginView {
         Scene scene = new Scene(AuthLayout.criar(card), 900, 620);
         Estilos.aplicar(scene);
 
-        stage.setTitle("Chat IA | Login");
+        stage.setTitle("Heaven AI| Login");
         stage.setMinWidth(520);
         stage.setMinHeight(480);
         stage.setScene(scene);

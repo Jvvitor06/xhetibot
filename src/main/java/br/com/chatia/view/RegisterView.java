@@ -41,7 +41,7 @@ public class RegisterView {
 
         Button voltar = new Button("Já tem conta? Entrar");
         voltar.getStyleClass().add("link");
-        voltar.setOnAction(e -> controller.irParaLogin());
+        voltar.setOnAction(e -> controller.irParaLogin(voltar));
 
         criar.setOnAction(e -> controller.cadastrar(
                 txtNome.getText(), txtEmail.getText(),

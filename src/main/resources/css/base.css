@@ -7,8 +7,6 @@
     -fx-font-family: "Segoe UI", Arial, sans-serif;
     -fx-font-size: 14px;
 
-    /* Cor de destaque: igual nos dois temas */
-    -cor-destaque: #ff4d6d;
 }
 
 /* ================= Login / Cadastro ================= */
@@ -76,7 +74,7 @@
 }
 
 .botao-primario {
-    -fx-background-color: linear-gradient(to right, #ff4d6d, #d83259);
+    -fx-background-color: linear-gradient(to right, -cor-grad-1, -cor-grad-2);
     -fx-text-fill: white;
     -fx-font-weight: bold;
     -fx-background-radius: 10;
@@ -85,7 +83,8 @@
 }
 
 .botao-primario:hover {
-    -fx-opacity: 0.9;
+    -fx-opacity: 0.95;
+    -fx-effect: dropshadow(gaussian, -cor-glow, 16, 0.25, 0, 0);
 }
 
 .botao-primario:disabled {
@@ -265,7 +264,7 @@
 }
 
 .bolha-usuario {
-    -fx-background-color: linear-gradient(to right, #ff4d6d, #d83259);
+    -fx-background-color: linear-gradient(to right, -cor-grad-1, -cor-grad-2);
     -fx-text-fill: white;
     -fx-background-radius: 16 16 4 16;
     -fx-padding: 10 14 10 14;
@@ -339,7 +338,12 @@
 }
 
 .dialog-pane .button:default {
-    -fx-background-color: linear-gradient(to right, #ff4d6d, #d83259);
+    -fx-background-color: linear-gradient(to right, -cor-grad-1, -cor-grad-2);
     -fx-text-fill: white;
     -fx-font-weight: bold;
+}
+
+/* Pontinhos do indicador "digitando" */
+.ponto-digitando {
+    -fx-fill: -cor-destaque;
 }

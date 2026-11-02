@@ -3,7 +3,9 @@ package br.com.chatia.controller;
 import br.com.chatia.service.PasswordRecoveryService;
 import br.com.chatia.util.Estilos;
 import br.com.chatia.util.Tarefa;
+import br.com.chatia.util.TransicaoForma;
 import br.com.chatia.view.LoginView;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
@@ -59,7 +61,8 @@ public class ForgotPasswordController {
                     service.redefinirSenha(email, codigo, senha);
                     return null;
                 },
-                v -> new LoginView().show(stage, "Senha redefinida com sucesso! Faça login."),
+                v -> TransicaoForma.navegar(botao, () ->
+                        new LoginView().show(stage, "Senha redefinida com sucesso! Faça login.")),
                 erro -> {
                     botao.setDisable(false);
                     botao.setText("Redefinir senha");
@@ -68,7 +71,7 @@ public class ForgotPasswordController {
         );
     }
 
-    public void voltar() {
-        new LoginView().show(stage);
+    public void voltar(Node origem) {
+        TransicaoForma.navegar(origem, () -> new LoginView().show(stage));
     }
 }

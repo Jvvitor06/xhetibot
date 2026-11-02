@@ -4,7 +4,9 @@ import br.com.chatia.exception.IAException;
 import com.mongodb.MongoException;
 
 /** Converte exceções técnicas em mensagens que o usuário entende. */
-public final class MensagemErro {
+public final class
+
+MensagemErro {
 
     private MensagemErro() {
     }

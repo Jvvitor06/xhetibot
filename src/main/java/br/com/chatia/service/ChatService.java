@@ -4,6 +4,7 @@ import br.com.chatia.model.AutorMensagem;
 import br.com.chatia.model.Conversa;
 import br.com.chatia.model.Mensagem;
 import br.com.chatia.rag.ResultadoBusca;
+import br.com.chatia.util.TextoSimples;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,8 @@ public class ChatService {
         ResultadoBusca busca = buscarContexto(pergunta);
         String instrucao = ragService.montarInstrucao(busca);
 
-        String resposta = groqService.responder(instrucao, ultimas(historico));
+        String resposta = TextoSimples.limpar(
+                groqService.responder(instrucao, ultimas(historico)));
 
         mensagemService.salvar(usuarioId, conversaId, AutorMensagem.USUARIO, pergunta);
         nomearConversaSeNova(usuarioId, conversaId, pergunta);

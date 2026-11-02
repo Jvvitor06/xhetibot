@@ -30,8 +30,10 @@ public final class Estilos {
         return temaAtual;
     }
 
+
     public static void aplicar(Scene scene) {
         scene.getStylesheets().setAll(folhas());
+        Animacoes.instalarEfeitoClique(scene);
     }
 
     /** Janelas de diálogo (confirmar, renomear) também usam o tema. */
@@ -50,6 +52,7 @@ public final class Estilos {
     public static void limpar(Label label) {
         definir(label, null, "");
     }
+
 
     // ------------------------------------------------------------------
 

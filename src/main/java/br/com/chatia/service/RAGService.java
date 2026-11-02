@@ -77,7 +77,9 @@ public class RAGService {
     public String montarInstrucao(ResultadoBusca busca) {
         StringBuilder sb = new StringBuilder();
         sb.append("Você é um assistente prestativo. Responda sempre em português do Brasil, ")
-                .append("de forma clara e objetiva.\n\n");
+                .append("de forma clara e objetiva. Responda em texto simples, sem formatação ")
+                .append("Markdown: não use #, *, crases, tabelas nem listas com hífen. Para listar ")
+                .append("itens, use frases curtas em linhas separadas ou numeração (1., 2., 3.).\n\n");
 
         if (!busca.encontrou()) {
             sb.append("Nenhum documento da base de conhecimento foi encontrado para esta ")

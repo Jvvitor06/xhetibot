@@ -1,6 +1,7 @@
 package br.com.chatia.controller;
 
 import br.com.chatia.util.Estilos;
+import br.com.chatia.util.TransicaoTema;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 
@@ -13,9 +14,13 @@ public class ThemeController {
 
     public void alternar(Button botao) {
         Scene scene = botao.getScene();
-        if (scene != null) {
-            Estilos.alternarTema(scene);
+        if (scene == null) {
+            return;
         }
-        botao.setText(textoDoBotao());
+        // A luz nasce no botão e vai trocando o tema por onde passa
+        TransicaoTema.executar(botao, () -> {
+            Estilos.alternarTema(scene);
+            botao.setText(textoDoBotao());
+        });
     }
 }
