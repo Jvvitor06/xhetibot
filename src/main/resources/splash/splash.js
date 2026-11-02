@@ -1,11 +1,8 @@
 const tl = gsap.timeline({
     onComplete: () => {
-        // Aguarda 100ms após o fechamento completo para acionar o carregamento da próxima tela no Java
-        setTimeout(() => {
-            if (window.javaBridge) {
-                window.javaBridge.onLoadFinished();
-            }
-        }, 100);
+        // A splashView (Java) escuta o alert do WebEngine (setOnAlert).
+        // Esta mensagem avisa que a animação acabou e que o login pode abrir.
+        alert("CHATIA_FINALIZAR");
     }
 });
 
